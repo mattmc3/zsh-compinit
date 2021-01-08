@@ -1,4 +1,5 @@
 # https://github.com/sorin-ionescu/prezto/blob/master/modules/completion/init.zsh#L31-L44
+# https://github.com/sorin-ionescu/prezto/blob/master/runcoms/zlogin#L9-L15
 # http://zsh.sourceforge.net/Doc/Release/Completion-System.html#Use-of-compinit
 # https://gist.github.com/ctechols/ca1035271ad134841284#gistcomment-2894219
 # https://htr3n.github.io/2018/07/faster-zsh/
@@ -6,6 +7,7 @@ function run_compinit() {
   # run compinit in a smarter, faster way
   setopt localoptions extendedglob
   ZSH_COMPDUMP=${ZSH_COMPDUMP:-$XDG_CACHE_HOME/zsh/zcompdump}
+  [[ -d "$ZSH_COMPDUMP:h" ]] || mkdir -p "$ZSH_COMPDUMP:h"
   autoload -Uz compinit
 
   # if compdump is less than 20 hours old,
@@ -19,8 +21,8 @@ function run_compinit() {
     # -C (skip function check) implies -i (skip security check).
     compinit -C -d "$ZSH_COMPDUMP"
   else
-    mkdir -p "$ZSH_COMPDUMP:h"
     compinit -i -d "$ZSH_COMPDUMP"
+    touch "$ZSH_COMPDUMP"
   fi
 
   # Compile zcompdump, if modified, in background to increase startup speed.
