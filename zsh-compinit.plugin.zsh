@@ -5,7 +5,9 @@
 # https://htr3n.github.io/2018/07/faster-zsh/
 function run_compinit() {
   # run compinit in a smarter, faster way
+  emulate -L zsh
   setopt localoptions extendedglob
+
   ZSH_COMPDUMP=${ZSH_COMPDUMP:-$XDG_CACHE_HOME/zsh/zcompdump}
   [[ -d "$ZSH_COMPDUMP:h" ]] || mkdir -p "$ZSH_COMPDUMP:h"
   autoload -Uz compinit
@@ -17,7 +19,7 @@ function run_compinit() {
   #   #q expands globs in conditional expressions
   #   N - sets null_glob option (no error on 0 results)
   #   mh-20 - modified less than 20 hours ago
-  if [[ $ZSH_COMPDUMP(#qNmh-20) ]]; then
+  if [[ "$1" != "-f" ]] && [[ $ZSH_COMPDUMP(#qNmh-20) ]]; then
     # -C (skip function check) implies -i (skip security check).
     compinit -C -d "$ZSH_COMPDUMP"
   else
